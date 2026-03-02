@@ -33,15 +33,11 @@ The project follows best practices such as:
 
 ## 📂 Project Structure
 Vector-enterprise/ 
------src/test/java
--------------Pages
--------------Test
--------------Utilities
--
--
------Pom.xml
-
----
+--src/test/java
+-----Pages
+-----Test
+-----Utilities
+--Pom.xml
 
 ## ⚙️ Setup & Installation
 
