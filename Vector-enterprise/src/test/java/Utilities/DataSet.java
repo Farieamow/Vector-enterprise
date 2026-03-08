@@ -21,4 +21,13 @@ public class DataSet extends BasePage {
 
 
     }
+    /*@DataProvider(name = "SearchTest")
+    public static Object[] TestSearchClick() {
+         Object[][]data={
+                {"53"},
+                {"Md. Sultan Ahmed"},
+                {"Tester FSE"}
+        };
+             return data;
+    }*/
 }
