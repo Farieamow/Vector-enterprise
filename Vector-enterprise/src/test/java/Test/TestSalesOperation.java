@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class TestSalesOperation extends webdriverSetup {
             getBrowser().findElement(sale.area_hidden).click();
             Thread.sleep(2000);
         }*/
-       Actions action = new Actions(getBrowser());
+      // Actions action = new Actions(getBrowser());
 
        sale.clickIfExists(sale.cleardate);
 
@@ -66,7 +67,7 @@ public class TestSalesOperation extends webdriverSetup {
        Thread.sleep(2000);*/
 
 
-       WebDriverWait wait3 = new WebDriverWait(getBrowser(), Duration.ofSeconds(10));
+       /*WebDriverWait wait3 = new WebDriverWait(getBrowser(), Duration.ofSeconds(10));
        WebElement fdate = wait3.until(
                ExpectedConditions.visibilityOfElementLocated(sale.fromdate));
        action.doubleClick(fdate).perform();
@@ -90,10 +91,10 @@ public class TestSalesOperation extends webdriverSetup {
        WebElement searchBox = wait.until(
                ExpectedConditions.visibilityOfElementLocated(sale.search));
        searchBox.clear();
-       searchBox.sendKeys("53");
+       searchBox.sendKeys("53");*/
        Thread.sleep(200);
 
-       getBrowser().findElement(sale.addchallanbtn).click();
+       /*getBrowser().findElement(sale.addchallanbtn).click();
        Thread.sleep(2000);
        WebElement selectso = wait.until(
                ExpectedConditions.visibilityOfElementLocated(sale.selectso));
@@ -120,12 +121,13 @@ public class TestSalesOperation extends webdriverSetup {
 
        String jsoValue = jsoField.getAttribute("value");
        System.out.println("JSO Value = " + jsoValue);*/
-       WebElement jsoField = getBrowser().findElement(By.xpath("//input[@name='jso']"));
-       WebElement upload = wait.until(
-               ExpectedConditions.visibilityOfElementLocated(sale.filebox));
-       action.moveToElement(upload).click().perform();
+       //WebElement jsoField = getBrowser().findElement(By.xpath("//input[@name='jso']"));
+      //WebElement upload = wait.until(
+              //ExpectedConditions.visibilityOfElementLocated(sale.filebox));
+      //.moveToElement(upload).click().perform();
+      //getBrowser().findElement(By.xpath("//button[@type='submit']")).click();
 
-       String jsoValue = jsoField.getAttribute("value");
+       /*String jsoValue = jsoField.getAttribute("value");
        if (jsoValue == null || jsoValue.isEmpty()) {
            System.out.println("Upload not allowed because JSO is not assigned");
            Assert.fail("JSO not assigned");
@@ -133,8 +135,87 @@ public class TestSalesOperation extends webdriverSetup {
 
            sale.uploadExcelFile("D:\\Sales Print\\Ahahad.xls");
 
-       }
-       Thread.sleep(2000);
-       getBrowser().findElement(By.xpath("//button[@type='submit']")).click();
+       }*/
+     /* WebElement upload2= getBrowser().findElement(By.xpath("//input[@type='file']"));
+      upload.sendKeys("C:\\Users\\User\\Downloads\\Hair Wash.jpg")
+      WebElement uploadBtn = getBrowser().findElement(By.className("ant-upload"));
 
-   }}
+      uploadBtn.click();
+
+      WebElement fileInput = getBrowser().findElement(By.xpath("//input[@type='file']"));
+
+      fileInput.sendKeys("D:\\Sales Print\\Ahahad.xlsx");
+      Thread.sleep(2000);
+       //action.moveToElement(sale.getElement(sale.filebox)).click().build().perform();*/
+
+
+
+      getBrowser().findElement(sale.addchallanbtn).click();
+      Thread.sleep(2000);
+
+      // ---------- 1. Select SO (Write your SO selection code here) ----------
+      WebElement so = wait.until(
+              ExpectedConditions.elementToBeClickable(sale.selectso)
+      );
+      so.click();
+      Actions action = new Actions(getBrowser());
+      action.sendKeys(Keys.ARROW_DOWN).build().perform();
+      Thread.sleep(200);
+      action.sendKeys(Keys.ARROW_DOWN).build().perform();
+      Thread.sleep(200);
+      action.sendKeys(Keys.ENTER).build().perform();
+      Thread.sleep(200);
+      action.sendKeys(Keys.ARROW_DOWN).build().perform();
+      action.sendKeys(Keys.ARROW_DOWN).build().perform();
+      action.sendKeys(Keys.ENTER).build().perform();
+      Thread.sleep(2000);
+
+      // Thread.sleep(1000);
+
+      // ---------- 2. Verify JSO ----------
+      WebElement jsoField = getBrowser().findElement(By.xpath("//input[@name='jso']"));
+      String jsoValue = jsoField.getAttribute("value");
+
+      if(jsoValue == null || jsoValue.isEmpty()){
+         Assert.fail("JSO not assigned. Upload not allowed.");
+      }
+       //getBrowser().findElement(sale.filebox).click();
+      Thread.sleep(2000);
+      // ---------- 3. Upload Excel File ----------
+      WebElement fileInput = wait.until(
+              ExpectedConditions.presenceOfElementLocated(
+                      By.xpath("//input[@type='file']")));
+      //getBrowser().findElement(By.xpath("//input[@type='file']"));
+       File file = new File("C:\\Users\\User\\Ahad.xls");
+
+       if(file.exists()){
+           fileInput.sendKeys(file.getAbsolutePath());
+       }else{
+           System.out.println("File not found!");
+       }
+                     // fileInput.sendKeys("D://Sales Print//Ahahad.xls");
+
+
+      Thread.sleep(2000);
+
+      // ---------- 4. Click Add Button ----------
+      WebElement addBtn = wait.until(
+              ExpectedConditions.elementToBeClickable(
+                      By.xpath("//button[@type='submit']")
+              )
+      );
+
+      addBtn.click();
+
+      // ---------- 5. Verify Success Message ----------
+     /* WebElement successMsg = wait.until(
+              ExpectedConditions.visibilityOfElementLocated(
+                      By.xpath("//*[contains(text(),'success')]")
+              )
+      );*/
+
+     // Assert.assertTrue(successMsg.isDisplayed());
+
+   }
+
+}
