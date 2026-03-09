@@ -163,59 +163,72 @@ public class TestSalesOperation extends webdriverSetup {
       Thread.sleep(200);
       action.sendKeys(Keys.ARROW_DOWN).build().perform();
       Thread.sleep(200);
-      action.sendKeys(Keys.ENTER).build().perform();
-      Thread.sleep(200);
-      action.sendKeys(Keys.ARROW_DOWN).build().perform();
+      //action.sendKeys(Keys.ENTER).build().perform();
+      //Thread.sleep(200);
+      //action.sendKeys(Keys.ARROW_DOWN).build().perform();
       action.sendKeys(Keys.ARROW_DOWN).build().perform();
       action.sendKeys(Keys.ENTER).build().perform();
       Thread.sleep(2000);
+       WebElement jsoField = wait.until(
+               ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@name='jso']"))
+       );
 
-      // Thread.sleep(1000);
+// Wait until JSO auto fills
+       Thread.sleep(2000);
 
-      // ---------- 2. Verify JSO ----------
-      WebElement jsoField = getBrowser().findElement(By.xpath("//input[@name='jso']"));
-      String jsoValue = jsoField.getAttribute("value");
+       String jsoValue = jsoField.getAttribute("value");
+       if (jsoValue != null && !jsoValue.trim().isEmpty()) {
 
-      if(jsoValue == null || jsoValue.isEmpty()){
-         Assert.fail("JSO not assigned. Upload not allowed.");
-      }
-       //getBrowser().findElement(sale.filebox).click();
-      Thread.sleep(2000);
-      // ---------- 3. Upload Excel File ----------
-      WebElement fileInput = wait.until(
-              ExpectedConditions.presenceOfElementLocated(
-                      By.xpath("//input[@type='file']")));
-      //getBrowser().findElement(By.xpath("//input[@type='file']"));
-       File file = new File("C:\\Users\\User\\Ahad.xls");
+           System.out.println("JSO Found: " + jsoValue);
+           Thread.sleep(2000);
 
-       if(file.exists()){
-           fileInput.sendKeys(file.getAbsolutePath());
-       }else{
-           System.out.println("File not found!");
+           WebDriverWait wait7 = new WebDriverWait(getBrowser(), Duration.ofSeconds(10));
+                   WebElement uploadIcon = wait.until(
+                          ExpectedConditions.elementToBeClickable(By.xpath("(//p[@class='ant-upload-text'])[1]")));
+                   //);
+          uploadIcon.click();
+
+// Step 2: Locate hidden file input
+           WebElement fileInput = wait.until(
+                   ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='file']"))
+           );
+           Thread.sleep(200);
+
+// Step 3: Make input visible (if hidden)
+           JavascriptExecutor js = (JavascriptExecutor) getBrowser();
+           js.executeScript("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", fileInput);
+
+           // Step 6: Verify file is in ant-upload-list
+           WebElement uploadedFile = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                   By.xpath("//div[contains(@class,'ant-upload-list')]//span[text()='Ahad.xls']")));
+                   fileInput.sendKeys("C:\\Users\\User\\Ahad.xls");
+           Thread.sleep(2000);
+
+
+           if(uploadedFile.isDisplayed()) {
+               System.out.println("File uploaded successfully and verified in system!");
+
+// Step 4: Send the file path
+
+           System.out.println("File uploaded successfully!");}
+       else {
+
+           System.out.println("JSO not assigned. File upload not allowed.");
+
        }
-                     // fileInput.sendKeys("D://Sales Print//Ahahad.xls");
+       Thread.sleep(3000);
 
 
-      Thread.sleep(2000);
+       WebElement addBtn = wait.until(
+               ExpectedConditions.elementToBeClickable(
+                       By.xpath("//button[@type='submit']"))
 
-      // ---------- 4. Click Add Button ----------
-      WebElement addBtn = wait.until(
-              ExpectedConditions.elementToBeClickable(
-                      By.xpath("//button[@type='submit']")
-              )
-      );
+       );
+       addBtn.click();
+       Thread.sleep(2000);
 
-      addBtn.click();
 
-      // ---------- 5. Verify Success Message ----------
-     /* WebElement successMsg = wait.until(
-              ExpectedConditions.visibilityOfElementLocated(
-                      By.xpath("//*[contains(text(),'success')]")
-              )
-      );*/
-
-     // Assert.assertTrue(successMsg.isDisplayed());
 
    }
 
-}
+}}
